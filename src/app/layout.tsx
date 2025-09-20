@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Ron | Backend Security Engineer",
+  title: "Martin Aguirre's Portfolio",
   description: "Specialized in Java & Spring Boot Security Engineering. Building secure, scalable backend solutions with enterprise-grade architecture.",
   keywords: ["Backend Developer", "Java", "Spring Boot", "Security Engineering", "Enterprise Architecture"],
   authors: [{ name: "Ron" }],
@@ -18,13 +18,13 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://website.com",
-    title: "Ron | Backend Security Engineer",
+    title: "Martin Aguirre's Portfolior",
     description: "Building secure backend solutions with Java & Spring Boot",
     siteName: "Ron Portfolio",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Ron | Backend Security Engineer",
+    title: "Martin Aguirre's Portfolior",
     description: "Building secure backend solutions with Java & Spring Boot",
   },
   robots: {

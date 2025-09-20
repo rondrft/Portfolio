@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://yourwebsite.com",
+    url: "https://website.com",
     title: "Ron | Backend Security Engineer",
     description: "Building secure backend solutions with Java & Spring Boot",
     siteName: "Ron Portfolio",

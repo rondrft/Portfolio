@@ -105,7 +105,7 @@ export default function AboutSection() {
   const currentProjectData = videoProjects[currentProject]
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen bg-white mt-20">
+    <section ref={sectionRef} className="relative bg-white mb-70 mt-20">
       {/* Smooth transition overlay */}
       <SectionOverlay position="top" />
 

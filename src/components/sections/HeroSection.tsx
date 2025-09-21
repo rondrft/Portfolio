@@ -107,7 +107,7 @@ export default function HeroSection() {
             alt="Passly"
             width={900}
             height={900}
-            className="rounded-l-2xl"
+            className="rounded-l-2xl w-[400px] h-auto sm:w-[500px] md:w-[600px] lg:w-[600px] xl:w-[900px]"
           />
         </div>
       </div>

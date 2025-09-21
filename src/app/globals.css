@@ -24,6 +24,42 @@ body {
   animation: gradient-shift 3s ease-in-out infinite;
 }
 
+/* Custom responsive image sizing for hero section */
+.hero-image {
+  width: 400px;
+  height: auto;
+}
+
+@media (min-width: 640px) {
+  .hero-image {
+    width: 500px;
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-image {
+    width: 600px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-image {
+    width: 650px;
+  }
+}
+
+@media (min-width: 1440px) and (max-width: 1650px) {
+  .hero-image {
+    width: 750px;
+  }
+}
+
+@media (min-width: 1651px) {
+  .hero-image {
+    width: 900px;
+  }
+}
+
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

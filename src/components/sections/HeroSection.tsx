@@ -2,6 +2,7 @@
 import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import Image from 'next/image'
+import { useTypewriter } from '@/hooks/useTypewriter'
 
 /**
  * HeroSection Component
@@ -17,6 +18,16 @@ export default function HeroSection() {
   const subtitleRef = useRef<HTMLParagraphElement>(null)
   const buttonsRef = useRef<HTMLDivElement>(null)
   const imageRef = useRef<HTMLDivElement>(null)
+
+  // Typewriter effect for dynamic text
+  const typewriterText = useTypewriter([
+    'Backend Architectures',
+    'Security Solutions', 
+    'Java Applications',
+    'Spring Boot APIs',
+    'Enterprise Systems',
+    'Microservices'
+  ])
 
   /**
    * Initialize entrance animations with coordinated timeline
@@ -107,7 +118,7 @@ export default function HeroSection() {
             alt="Passly"
             width={900}
             height={900}
-            className="rounded-l-2xl w-[400px] h-auto sm:w-[500px] md:w-[600px] lg:w-[600px] xl:w-[900px]"
+            className="rounded-l-2xl hero-image"
           />
         </div>
       </div>
@@ -119,8 +130,10 @@ export default function HeroSection() {
           <div className="mb-2">
             Building Secure
           </div>
-          <div>
-            Backend Architectures
+          <div className="relative">
+            {typewriterText}
+            {/* Cursor effect */}
+            <span className="animate-pulse text-white/80">|</span>
           </div>
         </h1>
        

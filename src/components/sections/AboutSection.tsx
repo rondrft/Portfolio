@@ -10,7 +10,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import { useScrollTrigger } from '@/hooks/useScrollTrigger'
-import { useGSAPAnimations } from '@/hooks/useGSAPAnimations'
 import ProjectVideo from '@/components/ui/ProjectVideo'
 import ProjectIndicator from '@/components/ui/ProjectIndicator'
 import SectionOverlay from '@/components/ui/SectionOverlay'
@@ -126,7 +125,6 @@ export default function AboutSection() {
                   title={currentProjectData.title}
                   date={currentProjectData.date}
                   description={currentProjectData.description}
-                  isActive={true}
                   onClick={handleProjectInteraction}
                 />
                 

@@ -1,12 +1,10 @@
 import { useEffect, useRef } from 'react'
-import { gsap } from 'gsap'
 
 interface ProjectVideoProps {
   videoSrc: string
   title: string
   date: string
   description: string
-  isActive: boolean
   onClick: () => void
 }
 
@@ -24,7 +22,6 @@ export default function ProjectVideo({
   title,
   date,
   description,
-  isActive,
   onClick
 }: ProjectVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null)

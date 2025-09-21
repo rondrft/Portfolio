@@ -12,7 +12,7 @@ import { gsap } from 'gsap'
 export const useGSAPAnimations = (
   elements: React.RefObject<HTMLElement | null>[],
   animationConfig: gsap.TweenVars,
-  dependencies: any[] = []
+  dependencies: React.DependencyList = []
 ) => {
   useEffect(() => {
     const validElements = elements.filter(ref => ref.current)
@@ -26,5 +26,5 @@ export const useGSAPAnimations = (
     return () => {
       gsap.killTweensOf(targets)
     }
-  }, dependencies)
+  }, [elements, animationConfig, ...dependencies])
 }

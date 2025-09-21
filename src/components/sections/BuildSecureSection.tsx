@@ -61,7 +61,7 @@ export default function BuildSecureSection() {
   }, [])
 
   return (
-    <section ref={sectionRef} className="relative bg-white -mt-50 mb-80 ">
+    <section ref={sectionRef} className="relative bg-white mt-30 mb-80 ">
       {/* Custom CSS for gradient text animation */}
       <style jsx>{`
         @keyframes shimmer {

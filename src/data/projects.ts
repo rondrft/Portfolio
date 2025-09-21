@@ -12,6 +12,15 @@ export interface Project {
   category: 'backend' | 'security' | 'api' | 'microservices'
 }
 
+// Interface specifically for video projects in AboutSection
+export interface VideoProject {
+  id: number
+  title: string
+  description: string
+  date: string
+  video: string
+}
+
 export const projects: Project[] = [
   // Future projects will be added here
   {
@@ -37,6 +46,24 @@ export const projects: Project[] = [
     featured: true,
     completedAt: new Date('2024-02-20'),
     category: 'api'
+  }
+]
+
+// Video projects data for AboutSection
+export const videoProjects: VideoProject[] = [
+  {
+    id: 1,
+    title: "PASSLY SECURITY PLATFORM",
+    description: "ENTERPRISE AUTHENTICATION SYSTEM",
+    date: "SEPTEMBER 2025",
+    video: "/passly.mp4"
+  },
+  {
+    id: 2,
+    title: "KEY MANAGEMENT SYSTEM", 
+    description: "SECURE ENCRYPTION SOLUTION",
+    date: "MAY 2025",
+    video: "/key.mp4"
   }
 ]
 

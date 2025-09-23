@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect, useRef, useCallback, useState } from 'react'
 
 interface ProjectVideoProps {
   videoSrc: string
@@ -24,13 +24,57 @@ export default function ProjectVideo({
   description,
   onClick
 }: ProjectVideoProps) {
+  const containerRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const timeoutRef = useRef<number | null>(null)
+  const [isInView, setIsInView] = useState(false)
+  const [isPageVisible, setIsPageVisible] = useState(true)
 
   // Memoize the click handler to prevent unnecessary re-renders
   const handleClick = useCallback(() => {
     onClick()
   }, [onClick])
+
+  // Observe viewport visibility to pause video and avoid background work
+  useEffect(() => {
+    const node = containerRef.current
+    if (!node) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0]
+        setIsInView(entry.isIntersecting)
+      },
+      { root: null, rootMargin: '0px', threshold: 0.25 }
+    )
+
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [])
+
+  // Track page/tab visibility
+  useEffect(() => {
+    const handleVisibility = () => setIsPageVisible(!document.hidden)
+    document.addEventListener('visibilitychange', handleVisibility)
+    handleVisibility()
+    return () => document.removeEventListener('visibilitychange', handleVisibility)
+  }, [])
+
+  // Play/pause based on visibility
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+
+    if (isInView && isPageVisible) {
+      // Try to play if visible
+      const playPromise = video.play()
+      if (playPromise && typeof playPromise.then === 'function') {
+        playPromise.catch(() => {/* ignore autoplay restrictions */})
+      }
+    } else {
+      video.pause()
+    }
+  }, [isInView, isPageVisible, videoSrc])
 
   /**
    * Handle video end event for auto-rotation with debouncing
@@ -40,15 +84,18 @@ export default function ProjectVideo({
     if (!video) return
 
     const handleVideoEnded = () => {
+      // Only rotate when the video is actually visible
+      if (!isInView || !isPageVisible) return
+
       // Clear any existing timeout
       if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current)
+        window.clearTimeout(timeoutRef.current)
       }
       
       // Debounce the auto-rotation to prevent rapid cycling
-      timeoutRef.current = setTimeout(() => {
+      timeoutRef.current = window.setTimeout(() => {
         handleClick()
-      }, 1000) // 1 second delay
+      }, 800) // slight delay
     }
 
     video.addEventListener('ended', handleVideoEnded)
@@ -56,10 +103,11 @@ export default function ProjectVideo({
     return () => {
       video.removeEventListener('ended', handleVideoEnded)
       if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current)
+        window.clearTimeout(timeoutRef.current)
+        timeoutRef.current = null
       }
     }
-  }, [handleClick])
+  }, [handleClick, isInView, isPageVisible])
 
   // Pause video when component unmounts to prevent memory leaks
   useEffect(() => {
@@ -69,11 +117,15 @@ export default function ProjectVideo({
     return () => {
       video.pause()
       video.currentTime = 0
+      if (timeoutRef.current) {
+        window.clearTimeout(timeoutRef.current)
+        timeoutRef.current = null
+      }
     }
   }, [])
 
   return (
-    <div className="relative cursor-pointer group" onClick={handleClick}>
+    <div ref={containerRef} className="relative cursor-pointer group" onClick={handleClick}>
       {/* Main video container */}
       <div className="relative overflow-hidden rounded-xl shadow-xl group-hover:shadow-2xl transition-shadow duration-300">
         <video

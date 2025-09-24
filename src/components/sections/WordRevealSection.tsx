@@ -7,7 +7,7 @@
  * @returns JSX.Element - Section with animated word reveal and professional messaging
  */
 'use client'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useMemo } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -16,21 +16,23 @@ gsap.registerPlugin(ScrollTrigger)
 export default function WordRevealSection() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const textRef = useRef<HTMLDivElement>(null)
+  const scrollTriggerRef = useRef<ScrollTrigger | null>(null)
   const [isInView, setIsInView] = useState(false)
 
-  // Professional messaging content
-  const text = "Every line of code I write is a building block toward bulletproof systems. Security isn't just a feature—it's the foundation that enables innovation to thrive without compromise."
-
-  // Split text into individual words for animation
-  const words = text.split(' ')
+  // Memoize text content to prevent unnecessary re-splits
+  const words = useMemo(() => 
+    "Every line of code I write is a building block toward bulletproof systems. Security isn't just a feature—it's the foundation that enables innovation to thrive without compromise.".split(' '),
+    []
+  )
 
   /**
    * Initialize scroll trigger to detect when section enters viewport
+   * Store reference for proper cleanup
    */
   useEffect(() => {
     if (!sectionRef.current || !textRef.current) return
 
-    ScrollTrigger.create({
+    scrollTriggerRef.current = ScrollTrigger.create({
       trigger: sectionRef.current,
       start: "top 70%",
       onEnter: () => setIsInView(true),
@@ -38,7 +40,11 @@ export default function WordRevealSection() {
     })
 
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill())
+      // Only kill this specific ScrollTrigger instance
+      if (scrollTriggerRef.current) {
+        scrollTriggerRef.current.kill()
+        scrollTriggerRef.current = null
+      }
     }
   }, [])
 
@@ -59,7 +65,7 @@ export default function WordRevealSection() {
     })
 
     // Animate each word with staggered timing
-    gsap.to(wordElements, {
+    const animation = gsap.to(wordElements, {
       opacity: 1,
       filter: 'blur(0px)',
       scale: 1,
@@ -68,6 +74,10 @@ export default function WordRevealSection() {
       ease: "power2.out"
     })
 
+    return () => {
+      // Clean up animation on unmount or re-render
+      animation.kill()
+    }
   }, [isInView])
 
   return (

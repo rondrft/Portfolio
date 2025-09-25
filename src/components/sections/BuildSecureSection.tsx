@@ -16,6 +16,8 @@ gsap.registerPlugin(ScrollTrigger)
 export default function BuildSecureSection() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const textRef = useRef<HTMLDivElement>(null)
+  const scrollTriggerRef = useRef<ScrollTrigger | null>(null)
+  const gradientAnimationRef = useRef<gsap.core.Tween | null>(null)
 
   /**
    * Set initial invisible state for smooth entrance animation
@@ -33,21 +35,21 @@ export default function BuildSecureSection() {
     if (!sectionRef.current || !textRef.current) return
 
     // Smooth entrance animation when section comes into view
-    gsap.to(textRef.current, {
-      opacity: 1,
-      duration: 1.5,
-      ease: "power2.out",
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: "top 80%",
-        once: true
-      }
+    scrollTriggerRef.current = ScrollTrigger.create({
+      trigger: sectionRef.current,
+      start: "top 80%",
+      animation: gsap.to(textRef.current, {
+        opacity: 1,
+        duration: 1.5,
+        ease: "power2.out"
+      }),
+      once: true
     })
 
     // Continuous gradient animation for "Secure" text
     const secureElement = textRef.current.querySelector('.secure-text')
     if (secureElement) {
-      gsap.to(secureElement, {
+      gradientAnimationRef.current = gsap.to(secureElement, {
         backgroundPosition: "400% center",
         duration: 4,
         ease: "none",
@@ -56,7 +58,16 @@ export default function BuildSecureSection() {
     }
 
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill())
+      // Only kill this specific ScrollTrigger instance
+      if (scrollTriggerRef.current) {
+        scrollTriggerRef.current.kill()
+        scrollTriggerRef.current = null
+      }
+      // Kill gradient animation
+      if (gradientAnimationRef.current) {
+        gradientAnimationRef.current.kill()
+        gradientAnimationRef.current = null
+      }
     }
   }, [])
 
